@@ -5,8 +5,7 @@ let countdown = function(timerCount) {
   timerCount.textContent -= 1;
   if (timerCount.textContent == 0) {
     alert('Вы победили в конкурсе!');
-    // return;
-  }
+  } 
 } 
   
 let timerId = setInterval(countdown, 1000, timerCount);
