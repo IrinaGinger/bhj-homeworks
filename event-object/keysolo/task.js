@@ -4,6 +4,7 @@ class Game {
     this.wordElement = container.querySelector('.word');
     this.winsElement = container.querySelector('.status__wins');
     this.lossElement = container.querySelector('.status__loss');
+    this.timerCount = container.querySelector('.timer');
 
     this.reset();
 
@@ -14,6 +15,21 @@ class Game {
     this.setNewWord();
     this.winsElement.textContent = 0;
     this.lossElement.textContent = 0;
+  }
+
+  timer(seconds) {
+    this.timerCount.textContent = seconds;
+
+    let countdown = function() {
+      if (--thisObject.timerCount.textContent == 0) {
+        alert("Время вышло");
+        thisObject.fail();
+      } 
+    }
+
+    let thisObject = this;
+    let timerId = setInterval(countdown, 1000);
+    setTimeout(() => clearInterval(timerId), seconds * 1000);
   }
 
   registerEvents() {
@@ -27,15 +43,15 @@ class Game {
      */
     
     function keysCompare(event) {
-      if (event.key === thisObject.currentSymbol.textContent) {
+      if (event.key.toLowerCase() === thisObject.currentSymbol.textContent.toLowerCase()) {
         thisObject.success();
-      } else {
-        thisObject.fail();
+        } else {
+          thisObject.fail();
+        }
       }
-    }
- 
+  
     let thisObject = this;
-    document.addEventListener('keydown', keysCompare);
+    document.addEventListener('keypress', keysCompare);
   }
 
   success() {
@@ -69,6 +85,8 @@ class Game {
     const word = this.getWord();
 
     this.renderWord(word);
+
+    this.timer([...word].length);
   }
 
   getWord() {
