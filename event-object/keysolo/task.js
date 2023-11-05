@@ -25,12 +25,25 @@ class Game {
       При неправильном вводе символа - this.fail();
       DOM-элемент текущего символа находится в свойстве this.currentSymbol.
      */
+    
+    function keysCompare(event) {
+      if (event.key === thisObject.currentSymbol.textContent) {
+        thisObject.success();
+      } else {
+        thisObject.fail();
+      }
+    }
+ 
+    let thisObject = this;
+    document.addEventListener('keydown', keysCompare);
   }
 
   success() {
-    if(this.currentSymbol.classList.contains("symbol_current")) this.currentSymbol.classList.remove("symbol_current");
-    this.currentSymbol.classList.add('symbol_correct');
-    this.currentSymbol = this.currentSymbol.nextElementSibling;
+    if (this.currentSymbol.classList.contains("symbol_current")) {
+      this.currentSymbol.classList.remove("symbol_current");
+      this.currentSymbol.classList.add('symbol_correct');
+      this.currentSymbol = this.currentSymbol.nextElementSibling;
+    }
 
     if (this.currentSymbol !== null) {
       this.currentSymbol.classList.add('symbol_current');
@@ -86,9 +99,9 @@ class Game {
       .join('');
     this.wordElement.innerHTML = html;
 
-    this.currentSymbol = this.wordElement.querySelector('.symbol_current');
+    this.currentSymbol = this.wordElement.querySelector('.symbol_current');    
   }
 }
 
-new Game(document.getElementById('game'))
+new Game(document.getElementById('game'));
 
