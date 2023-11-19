@@ -19,17 +19,39 @@ class Game {
 
   timer(seconds) {
     this.timerCount.textContent = seconds;
+    let now = new Date;                                 //убрать
+    let newTime;                                        //убрать
 
-    let countdown = function() {
-      if (--thisObject.timerCount.textContent == 0) {
-        alert("Время вышло");
+    function countdown() {
+      console.log(thisObject.timerCount.textContent);  //убрать
+      newTime = new Date;                              //убрать
+      console.log(newTime - now);                      //убрать
+      now = newTime;                                   //убрать
+
+      if (Number(thisObject.timerCount.textContent) === 0) {
+        // alert("Время вышло");
+        console.log("Время вышло");                //убрать
         thisObject.fail();
+        clearTimeout(timerId);
+        return;
       } 
+
+      thisObject.timerCount.textContent = thisObject.timerCount.textContent - 1;
+      timerId = setTimeout(countdown, 1000);
     }
 
     let thisObject = this;
-    let timerId = setInterval(countdown, 1000);
-    setTimeout(() => clearInterval(timerId), seconds * 1000);
+    let timerId = setTimeout(countdown, 1000);
+    
+
+    // let timerId = setInterval(countdown, 1000);
+    // if (Number(thisObject.timerCount.textContent) === 0) {
+    //   clearInterval(timerId);
+    //   alert("Время вышло");
+    //   thisObject.fail();
+    // } 
+
+    // setTimeout(() => clearInterval(timerId), seconds * 1000);
   }
 
   registerEvents() {
@@ -76,9 +98,11 @@ class Game {
   fail() {
     if (++this.lossElement.textContent === 5) {
       alert('Вы проиграли!');
+      console.log('Вы проиграли!');                      //убрать
       this.reset();
+    } else {
+      this.setNewWord();
     }
-    this.setNewWord();
   }
 
   setNewWord() {
