@@ -34,11 +34,10 @@ btnProductAdd.forEach((element, index) => {
     let productSelectedTitle = productTitle[index].textContent;
     let productSelectedQuantity = Number(productQuantity[index].textContent);
 
-    let cartPosition = productsSelected.findIndex((elem, i) => {
-      return productsSelected[i].productSelectedTitle === productSelectedTitle;
+    let cartPosition = productsSelected.findIndex((elem) => {
+      return elem.productSelectedTitle === productSelectedTitle;
     })
-    console.log(cartPosition);
-
+    
     if (cartPosition >= 0) {
       productSelectedQuantity = productsSelected[cartPosition].productSelectedQuantity + productSelectedQuantity;
       console.log(productSelectedQuantity);
@@ -50,8 +49,7 @@ btnProductAdd.forEach((element, index) => {
       
     } else {
       productsSelected.push({ productSelectedTitle, productSelectedQuantity });   
-      console.log(productsSelected);
-
+      
       let productCartForAdd = productCart.cloneNode(true);
       productCartForAdd.dataset.id = productTitle[index].closest(".product").dataset.id;
       productCartForAdd.firstChild.setAttribute("src", productImages[index].getAttribute("src"));
