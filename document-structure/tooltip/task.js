@@ -14,29 +14,13 @@ tooltipElements.forEach((elem, index) => {
   elem.addEventListener("click", (event) => {
     event.preventDefault();
     let position = elem.getBoundingClientRect();
-
+    
     if ((activeIndex != undefined) && (activeIndex != index)) {
       tooltipElements[activeIndex].nextSibling.classList.remove("tooltip_active");
     }
     
-    elem.nextSibling.setAttribute("style", `position: absolute; top: ${position.bottom}; left: ${position.left}`);
+    elem.nextSibling.setAttribute("style", `position: absolute; left: ${position.left}px`);
     elem.nextSibling.classList.toggle("tooltip_active");
     activeIndex = index;
   })
 })
-
-
-window.addEventListener('scroll', function() {  
-  function isVisible(pos) {
-      const viewportHeight = window.innerHeight;
-      return ((pos.top < viewportHeight) && (pos.bottom > 0));
-    }
-
-    tooltipElements.forEach(element => {
-      let position = element.getBoundingClientRect();
-
-      if (!isVisible(position)) {
-        element.nextSibling.classList.remove("tooltip_active");
-      }
-    });
-  })
