@@ -18,20 +18,9 @@ class Game {
     this.lossElement.textContent = 0;
   }
 
-  timer(seconds) {
-    this.timerCount.textContent = seconds;
-    
-    // let now = new Date;                                 
-    // let newTime;                                        
-
+  timer() {
     this.timerId = setInterval(() => {
-      // console.log(this.timerCount.textContent);        
-      // newTime = new Date;                              
-      // console.log(newTime - now);                      
-      // now = newTime;                                   
-           
       if (Number(this.timerCount.textContent) === 0) {
-        console.log("Время вышло");                //убрать
         this.fail();
       } 
 
@@ -69,8 +58,6 @@ class Game {
     }
 
     if (++this.winsElement.textContent === 10) {
-      clearInterval(this.timerId);
-
       alert('Победа!');
       this.reset();
     }
@@ -78,8 +65,6 @@ class Game {
   }
 
   fail() {
-    clearInterval(this.timerId);
-
     if (++this.lossElement.textContent === 5) {
       alert('Вы проиграли!');
       this.reset();
@@ -89,11 +74,17 @@ class Game {
   }
 
   setNewWord() {
+    if (this.timerId !== "") {
+      clearInterval(this.timerId);
+    }
+    
     const word = this.getWord();
 
     this.renderWord(word);
 
-    this.timer([...word].length);
+    this.timerCount.textContent = [...word].length;
+
+    this.timer();
   }
 
   getWord() {
