@@ -5,6 +5,7 @@ class Game {
     this.winsElement = container.querySelector('.status__wins');
     this.lossElement = container.querySelector('.status__loss');
     this.timerCount = container.querySelector('.timer');
+    this.timerId = "";
 
     this.reset();
 
@@ -19,39 +20,23 @@ class Game {
 
   timer(seconds) {
     this.timerCount.textContent = seconds;
-    let now = new Date;                                 //убрать
-    let newTime;                                        //убрать
+    
+    // let now = new Date;                                 
+    // let newTime;                                        
 
-    function countdown() {
-      console.log(thisObject.timerCount.textContent);  //убрать
-      newTime = new Date;                              //убрать
-      console.log(newTime - now);                      //убрать
-      now = newTime;                                   //убрать
-
-      if (Number(thisObject.timerCount.textContent) === 0) {
-        // alert("Время вышло");
+    this.timerId = setInterval(() => {
+      // console.log(this.timerCount.textContent);        
+      // newTime = new Date;                              
+      // console.log(newTime - now);                      
+      // now = newTime;                                   
+           
+      if (Number(this.timerCount.textContent) === 0) {
         console.log("Время вышло");                //убрать
-        thisObject.fail();
-        clearTimeout(timerId);
-        return;
+        this.fail();
       } 
 
-      thisObject.timerCount.textContent = thisObject.timerCount.textContent - 1;
-      timerId = setTimeout(countdown, 1000);
-    }
-
-    let thisObject = this;
-    let timerId = setTimeout(countdown, 1000);
-    
-
-    // let timerId = setInterval(countdown, 1000);
-    // if (Number(thisObject.timerCount.textContent) === 0) {
-    //   clearInterval(timerId);
-    //   alert("Время вышло");
-    //   thisObject.fail();
-    // } 
-
-    // setTimeout(() => clearInterval(timerId), seconds * 1000);
+      this.timerCount.textContent = this.timerCount.textContent - 1;
+    }, 1000);
   }
 
   registerEvents() {
@@ -64,31 +49,28 @@ class Game {
       DOM-элемент текущего символа находится в свойстве this.currentSymbol.
      */
     
-    function keysCompare(event) {
-      if (event.key.toLowerCase() === thisObject.currentSymbol.textContent.toLowerCase()) {
-        thisObject.success();
-        } else {
-          thisObject.fail();
-        }
+    document.addEventListener('keyup', (e) => {
+      if (e.key.toLowerCase() === this.currentSymbol.textContent.toLowerCase()) {
+        this.success();
+      } else {
+        this.fail();
       }
-  
-    let thisObject = this;
-    document.addEventListener('keypress', keysCompare);
+    });
   }
 
   success() {
-    if (this.currentSymbol.classList.contains("symbol_current")) {
-      this.currentSymbol.classList.remove("symbol_current");
+    if (this.currentSymbol.classList.contains("symbol_current")) this.currentSymbol.classList.remove("symbol_current");
       this.currentSymbol.classList.add('symbol_correct');
       this.currentSymbol = this.currentSymbol.nextElementSibling;
-    }
-
+    
     if (this.currentSymbol !== null) {
       this.currentSymbol.classList.add('symbol_current');
       return;
     }
 
     if (++this.winsElement.textContent === 10) {
+      clearInterval(this.timerId);
+
       alert('Победа!');
       this.reset();
     }
@@ -96,9 +78,10 @@ class Game {
   }
 
   fail() {
+    clearInterval(this.timerId);
+
     if (++this.lossElement.textContent === 5) {
       alert('Вы проиграли!');
-      console.log('Вы проиграли!');                      //убрать
       this.reset();
     } else {
       this.setNewWord();
